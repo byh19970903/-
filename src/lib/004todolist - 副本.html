@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  <style>
+  .red{color: red;}
+  </style>
+</head>
+<body>
+    <div id="app">
+        新闻标题：<input type="text" v-model="inputVal"><br>
+        新闻地址：<input type="text" v-model="link">
+       
+        <ul>
+            <li v-for="(item,index) in arr" :key='index'>
+                <span >[{{item.newtype}}]</span>
+                <a :href="item.link":class="{red:item.isRed =='是'}">{{item.link}}</a>
+                <span v-once>{{getTime()}}</span>
+                <!-- <button @click="handleDel(index)">删除</button> -->
+            </li>
+        </ul>
+        新闻类别： <select v-model="newtype">
+                <option v-for="(item, index) in newtypes":value="item">{{item}}</option>
+           
+        </select><br>
+        是否标红：<label>
+            是 <input type="radio" value="是" v-model="isRed">
+        </label>
+        <label>
+            否<input type="radio" value="否" v-model="isRed">
+        </label><br>
+        <button @click="handleAdd();getTime();">提交</button><hr>
+
+    </div>
+  
+   
+</body>
+</html>
+<script src="vue.js"></script>
+<script>
+let vm = new Vue({
+    el:"#app",
+    data:{newtypes:["科技","嘻嘻","呵呵"],
+        isRed:"是",
+        inputVal:"",
+        link:"",
+        list:[],
+        newtype:"科技",
+        arr: [],
+    },
+    methods:{
+        handleAdd(){
+           var obj = {};
+           obj.text = this.inputVal;
+           obj.link = this.link;
+           obj.newtype=this.newtype;
+           obj.isRed=this.isRed;
+           this.list.push(obj);
+            this.inputVal = "";
+            this.link = "";
+            this.newtype="科技";
+            this.arr.push(obj);
+        },
+        getTime(){
+                let timeStr="";
+                let date=new Date();
+                let y=date.getFullYear(),
+                    m=date.getMonth()+1,
+                    d=date.getDate(),
+                    h=date.getHours(),
+                    i=date.getMinutes(),
+                    s=date.getSeconds();
+                    if(m<10) {m = '0'+m;}
+                    if(d<10) {d = '0'+d;}
+                    if(h<10) {h = '0'+h;}
+                    if(i<10) {i = '0'+i;}
+                    if(s<10) {s = '0'+s;}
+                timeStr+=y+'-'+m+'-'+d+' '+h+':'+i+':'+s;
+                return  timeStr;
+            },
+        handleDel(index){
+            this.list.splice(index,1)
+        }
+        
+    }
+})
+</script>
